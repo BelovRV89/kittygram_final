@@ -11,7 +11,7 @@ jobs:
     # Блок services аналогичен docker-compose.yml
     services:
       postgres:
-        image: postgres:13.10
+        image: postgres:13
         # Указываем имя тестовой базы, имя и пароль пользователя в открытом виде,
         # ведь эта база будет работать только во время прогона тестов
         env:
@@ -34,6 +34,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip 
+          pip install python-dotenv
           pip install flake8==6.0.0 flake8-isort==6.0.0
           pip install -r ./backend/requirements.txt
       # Этот шаг дополним переменными для доступа к БД
