@@ -1,10 +1,13 @@
-#  Проект «Контейнеры и CI/CD для Kittygram»
+# Проект «Контейнеры и CI/CD для Kittygram»
 
 ## Описание проекта:
 
 - #### Проект Kittygram позволяет пользователям поделиться своим котиками и рассказать всем зарегистрированным пользователям о его достижениях!
+
 ---
+
 ## Возможности проекта:
+
 - #### Регистрируйтесь и входите в свой аккаунт!
 - #### Добавляйте вашего котика!
 - #### Убрать вашего котика!
@@ -12,7 +15,9 @@
 - #### Обязательно добавляйте смешное фото вашего котика!
 - #### Расскажите всем о достижениях вашего котика!
 - #### Укажите год рождения вашего котика.
+
 ---
+
 ## Запуск проекта:
 
 ``` Настройка Docker
@@ -20,34 +25,42 @@ sudo apt update
 sudo apt install curl
 curl -fSL https://get.docker.com -o get-docker.sh
 sudo sh ./get-docker.sh
-sudo apt-get install docker-compose-plugin;
-# Переходим в директорию проекта.
+sudo apt-get install docker-compose-plugin
+
+# Переходим в директорию проекта
 cd kittygram_final/
+
 # Создаем и редактируем файл .env, в котором нужно указать данные
 sudo nano .env
-# 
+# Вставьте следующие строки в файл .env
 DJANGO_KEY=django-insecure-cg6*%6d51ef8f#4!r3*$vmxm4)abgjw8mo!4y-q*uq1!4$-89$
 POSTGRES_DB=<Желаемое_имя_базы_данных>
 POSTGRES_USER=<Желаемое_имя_пользователя_базы_данных>
 POSTGRES_PASSWORD=<Желаемый_пароль_пользователя_базы_данных>
 DB_HOST=db
 DB_PORT=5432
-# Сохраняем файл. Ключ DJANGO_KEY рекомендуется заменить
-# Далее выполняем последовательно
-sudo docker compose -f docker-compose.production.yml pull
-sudo docker compose -f docker-compose.production.yml down
-sudo docker compose -f docker-compose.production.yml up -d
-sudo docker compose -f docker-compose.production.yml exec backend python manage.py migrate
-sudo docker compose -f docker-compose.production.yml exec backend python manage.py collectstatic
-sudo docker compose -f docker-compose.production.yml exec backend cp -r /app/collect_static/. /static_backend/static/
-# Создаем суперпользователся. Следуем инструкциям при выполнении.
-sudo docker compose -f docker-compose.production.yml exec backend python manage.py createsuperuser
+# Сохраняем файл
 
 # Генерируем новый секретный ключ Django
 sudo docker compose -f docker-compose.production.yml exec backend python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'
 # В ответ будет примерно такая строка: cg6*%6d51ef8f#4!r3*$vmxm4)abgjw8mo!4y-q*uq1!4$-88$
 # Вставляем в .env файл. Должно получиться примерно такое:
-DJANGO_KEY=django-insecure-cg6*%6d51ef8f#4!r3*$vmxm4)abgjw8mo!4y-q*uq1!4$-89$
+# DJANGO_KEY=django-insecure-cg6*%6d51ef8f#4!r3*$vmxm4)abgjw8mo!4y-q*uq1!4$-89$
+
+# Подтягиваем образы Docker
+sudo docker compose -f docker-compose.production.yml pull
+
+# Запускаем контейнеры
+sudo docker compose -f docker-compose.production.yml up -d
+
+# Выполняем миграции
+sudo docker compose -f docker-compose.production.yml exec backend python manage.py migrate
+
+# Собираем статические файлы
+sudo docker compose -f docker-compose.production.yml exec backend python manage.py collectstatic
+
+# Копируем статические файлы в нужную папку
+sudo docker compose -f docker-compose.production.yml exec backend cp -r /app/collected_static
 ```
 
 Устанавливаем и настраиваем NGINX
@@ -83,6 +96,7 @@ sudo nginx -t
 # Запускаем NGINX
 sudo systemctl start nginx
 ```
+
 Настраиваем HTTPS
 
 ```bash
@@ -110,7 +124,9 @@ sudo systemctl reload nginx
 ```
 
 ---
+
 ## В проекте были использованы технологии:
+
 * #### Django REST
 * #### Python 3.9
 * #### Gunicorn
